@@ -1,6 +1,7 @@
 class AiMessageChannel < ApplicationCable::Channel
   def subscribed
     p " subscribed "
+    
     # stream_from "some_channel"
   end
 
