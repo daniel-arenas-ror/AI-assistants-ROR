@@ -73,3 +73,4 @@ end
 
 gem "ruby-openai"
 gem 'dotenv-rails'
+gem "rack-cors"
