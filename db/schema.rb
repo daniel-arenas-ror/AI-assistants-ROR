@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_22_173446) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_22_183341) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -33,6 +33,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_173446) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.bigint "assistant_id", null: false
+    t.string "thread_id", null: false
+    t.jsonb "messages"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assistant_id"], name: "index_messages_on_assistant_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -48,5 +57,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_173446) do
   end
 
   add_foreign_key "assistants", "enterprises"
+  add_foreign_key "messages", "assistants"
   add_foreign_key "users", "enterprises"
 end
