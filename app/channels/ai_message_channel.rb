@@ -4,13 +4,10 @@ class AiMessageChannel < ApplicationCable::Channel
     stream_from "ai_message_channel_#{thread_id}"
 
     messages = Message.find_by_thread_id(thread_id).messages
-    ActionCable.server.broadcast "ai_message_channel_#{thread_id}", { messages: messages }
+    ActionCable.server.broadcast "ai_message_channel_#{thread_id}", { action: 'updateMessages', messages: messages }
   end
 
   def unsubscribed
-    p " unsubscribed "
-    # Any cleanup needed when channel is unsubscribed
-
     stop_all_streams
   end
 end
