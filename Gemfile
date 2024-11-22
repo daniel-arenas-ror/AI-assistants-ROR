@@ -75,3 +75,4 @@ gem 'dotenv-rails'
 gem "rack-cors"
 
 gem "devise", "~> 4.9"
+gem "encryptor"
