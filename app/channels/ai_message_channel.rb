@@ -1,11 +1,10 @@
 class AiMessageChannel < ApplicationCable::Channel
   def subscribed
-    p " subscribed "
-    p params
-    p " *********** "
-    stream_from "ai_message_channel" ## here just configurate the channel to send the updates
+    thread_id = params[:thread_id]
+    stream_from "ai_message_channel_#{thread_id}"
 
-    #ActionCable.server.broadcast "ai_message_channel", { someq: "someq" }
+    messages = Message.find_by_thread_id(thread_id).messages
+    ActionCable.server.broadcast "ai_message_channel_#{thread_id}", { messages: messages }
   end
 
   def unsubscribed
