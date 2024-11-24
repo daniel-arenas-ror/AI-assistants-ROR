@@ -42,16 +42,8 @@ module OpenAI
         run_id = run['id']
 
         while true do
-          p " enter to true "
-          p run_id
-          p @thread_id
-
           response = client.runs.retrieve(id: run_id, thread_id: @thread_id)
           status = response['status']
-        
-          p " status "
-          p status
-          p " **** **** "
 
           case status
           when 'queued', 'in_progress', 'cancelling'
@@ -62,6 +54,8 @@ module OpenAI
           when 'completed'
 
             ActionCable.server.broadcast "ai_message_channel_#{@thread_id}", { action: 'stopTyping' }
+            sleep rand(2..5)
+
             messages = client.messages.list(thread_id: thread_id, parameters: { order: 'asc' })
             @message.update!(messages: messages)
 
