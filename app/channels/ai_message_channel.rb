@@ -4,8 +4,6 @@ class AiMessageChannel < ApplicationCable::Channel
     thread_id    = params[:thread_id]
 
     assistant = Assistant.find(params[:assistant_id])
-    thread_id = OpenAI::Thread.new(assistant_id: assistant.id) unless thread_id
-
     messages = assistant.messages.find_by_thread_id(thread_id).messages
 
     stream_from "ai_message_channel_#{thread_id}"

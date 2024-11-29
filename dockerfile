@@ -29,7 +29,7 @@ COPY Gemfile.lock ${APP_HOME}/Gemfile.lock
 
 # Make sure we are running bundler version 2.0
 RUN gem install bundler
-RUN bundle install
+RUN bundle install --without development test
 
 # Copy the project over
 COPY . ${APP_HOME}
