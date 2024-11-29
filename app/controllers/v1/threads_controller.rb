@@ -7,7 +7,6 @@ module V1
       messages = assistant.messages.create(thread_id: thread_id).messages
 
       render json: {
-        assistant: assistant,
         thread_id: thread_id,
       }, status: :accepted
     end
