@@ -7,11 +7,6 @@ module OpenAI
       def initialize(
         thread_id:
       )
-
-        p "** thread_id ** "
-        p thread_id
-        p " ** ** ** -- -- -- "
-
         @thread_id = thread_id
         @message = Message.find_by_thread_id(thread_id)
 
@@ -45,6 +40,10 @@ module OpenAI
           response = client.runs.retrieve(id: run_id, thread_id: @thread_id)
           status = response['status']
 
+          p " status "
+          p status
+          p " ***** "
+
           case status
           when 'queued', 'in_progress', 'cancelling'
             puts 'Sleeping'
@@ -54,7 +53,7 @@ module OpenAI
           when 'completed'
 
             ActionCable.server.broadcast "ai_message_channel_#{@thread_id}", { action: 'stopTyping' }
-            sleep rand(2..5)
+            sleep rand(1..3)
 
             messages = client.messages.list(thread_id: thread_id, parameters: { order: 'asc' })
             @message.update!(messages: messages)

@@ -1,9 +1,14 @@
 class AiMessageChannel < ApplicationCable::Channel
   def subscribed
-    thread_id = params[:thread_id]
-    stream_from "ai_message_channel_#{thread_id}"
+    assistant_id = params[:assistant_id]
+    thread_id    = params[:thread_id]
 
-    messages = Message.find_by_thread_id(thread_id).messages
+    assistant = Assistant.find(params[:assistant_id])
+    thread_id = OpenAI::Thread.new(assistant_id: assistant.id) unless thread_id
+
+    messages = assistant.messages.find_by_thread_id(thread_id).messages
+
+    stream_from "ai_message_channel_#{thread_id}"
     ActionCable.server.broadcast "ai_message_channel_#{thread_id}", { action: 'updateMessages', messages: messages }
   end
 
