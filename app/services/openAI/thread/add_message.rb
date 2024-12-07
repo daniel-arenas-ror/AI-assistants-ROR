@@ -68,7 +68,30 @@ module OpenAI
           when 'requires_action'
             # Handle tool calls (see below)
             p "** requiere action **"
-            
+            tool_outputs = []
+
+            response['required_action']['submit_tool_outputs']['tool_calls'].each do |submit_tool_output|
+              p " submit_tool_output "
+              p submit_tool_output
+              p " *** *** *** "
+
+              tool_id = submit_tool_output['id']
+              arguments = JSON.parse(submit_tool_output['function']['arguments'])
+              @enterpise.leads.create!(extra_data: arguments)
+
+              message = "Gracias!! #{arguments["name"]}, tu pedido ha sido creado. tu plato #{arguments["dish"]} llegará lo más pronto posible."
+
+              tool_outputs.push({
+                tool_call_id: tool_id, 
+                output: message
+              })
+            end
+
+            client.runs.submit_tool_outputs(
+              thread_id: @thread_id,
+              run_id: run_id,
+              parameters: { tool_outputs: tool_outputs }
+            )
           when 'cancelled', 'failed', 'expired'
             puts response['last_error'].inspect
             break # or `exit`
