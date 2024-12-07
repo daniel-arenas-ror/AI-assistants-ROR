@@ -40,6 +40,10 @@ module OpenAI
           response = client.runs.retrieve(id: run_id, thread_id: @thread_id)
           status = response['status']
 
+          p " response "
+          p response
+          p " ************ "
+
           p " status "
           p status
           p " ***** "
@@ -63,6 +67,8 @@ module OpenAI
             break # Exit loop and report result to user
           when 'requires_action'
             # Handle tool calls (see below)
+            p "** requiere action **"
+            
           when 'cancelled', 'failed', 'expired'
             puts response['last_error'].inspect
             break # or `exit`
