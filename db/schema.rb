@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_22_230121) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_07_224727) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,6 +32,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_230121) do
     t.string "ai_source"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "leads", force: :cascade do |t|
+    t.bigint "enterprise_id", null: false
+    t.jsonb "extra_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["enterprise_id"], name: "index_leads_on_enterprise_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -58,6 +66,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_230121) do
   end
 
   add_foreign_key "assistants", "enterprises"
+  add_foreign_key "leads", "enterprises"
   add_foreign_key "messages", "assistants"
   add_foreign_key "users", "enterprises"
 end
