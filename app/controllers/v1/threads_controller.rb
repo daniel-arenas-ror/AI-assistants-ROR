@@ -4,8 +4,6 @@ module V1
       assistant = Assistant.find_by_code(params[:assistant_id])
       thread_id = OpenAI::Thread::Create.new(assistant_id: assistant.id).process
 
-      messages = assistant.messages.create(thread_id: thread_id).messages
-
       render json: {
         thread_id: thread_id,
       }, status: :accepted
