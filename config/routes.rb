@@ -9,4 +9,6 @@ Rails.application.routes.draw do
     resources :threads, only: [:create]
     resources :assistants, only: [:show]
   end
+
+  resources :categories, only: [:index]
 end
