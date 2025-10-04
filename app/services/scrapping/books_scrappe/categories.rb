@@ -3,6 +3,7 @@ module Scrapping
     class Categories < Base
 
       attr_reader :category_shape
+
       def initialize
         super
 

@@ -11,8 +11,8 @@ module Scrapping
         }
       end
 
-      def get_document
-        response = HTTParty.get(URL, { headers: @headers })
+      def get_document(url: nil)
+        response = HTTParty.get((url || URL), { headers: @headers })
         @document = Nokogiri::HTML(response.body)
       end
     end
