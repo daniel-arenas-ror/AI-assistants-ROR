@@ -10,20 +10,21 @@ module Scrapping
         'Five' => 5,
       }
 
-      def initialize
-      end
-
-      def create_books
+      def create_update_books
         Category.all.each do |category|
-          document = get_document(category.url)
-          ## Pagination ##
+          p " checking category !!"
+          p category.name
 
-          html_books = document.css("article.product_pod")
+          html_books = get_all_books(category.url)
+
+          p "I got all the books #{html_books.count}"
 
           html_books.each do |html_book|
             name  = html_book.css("h3 a").first.text
+            p " going to create #{name}"
+
             price = html_book.css("div.product_price p.price_color").first.text
-            qualification = books.css("p.star-rating").first.attribute_nodes.first.value.gsub("star-rating", ' ').strip()
+            qualification = html_book.css("p.star-rating").first.attribute_nodes.first.value.gsub("star-rating", ' ').strip()
             qualification = STARTS[qualification]
 
             create_update_book(
@@ -34,6 +35,25 @@ module Scrapping
             )
           end
         end
+      end
+
+      def get_all_books(category_url)
+        new_books = true
+        html_books = []
+        url = category_url
+        current_page = 1
+
+        while new_books
+          url.gsub!(/(?:index\.html|page-\d+\.html)/, "page-#{current_page}.html") if !(current_page == 1)
+
+          document = get_document(url: url)
+          current_page += 1
+
+          new_books = false if document.css("article.product_pod").empty?
+          html_books += document.css("article.product_pod")
+        end
+
+        html_books
       end
 
       private
@@ -56,7 +76,7 @@ module Scrapping
             qualification: qualification
           )
         else
-          book.create!(
+          Book.create!(
             name: name,
             category: category,
             price: price,
