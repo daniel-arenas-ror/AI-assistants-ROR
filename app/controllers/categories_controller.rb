@@ -1,7 +1,10 @@
 class CategoriesController < ApplicationController
   def index
-    @categories = Category.all
+    @categories = Category.page(page_no).per(per_page)
 
-    render json: @categories.then(&paginate)
+    render json: {
+      objects: @categories,
+      meta: pagination_meta(@categories)
+    }
   end
 end
