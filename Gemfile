@@ -86,3 +86,8 @@ gem 'pundit'
 
 gem 'nokogiri'
 gem 'httparty'
+
+gem 'kaminari'
+gem 'pagy'
+gem 'pager_api'
+gem 'active_model_serializers'

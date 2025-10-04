@@ -24,6 +24,8 @@ module Scrapping
             p " going to create #{name}"
 
             price = html_book.css("div.product_price p.price_color").first.text
+            price = price.gsub("£", '')
+
             qualification = html_book.css("p.star-rating").first.attribute_nodes.first.value.gsub("star-rating", ' ').strip()
             qualification = STARTS[qualification]
 

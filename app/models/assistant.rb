@@ -7,6 +7,7 @@ class Assistant < ApplicationRecord
   after_create :sync_assistant
 
   def sync_assistant
-    OpenAI::AssistantAI::Create.new(assistant_id: self.id).process
+    # TODO: Implement this
+    # OpenAI::AssistantAI::Create.new(assistant_id: self.id).process
   end
 end
